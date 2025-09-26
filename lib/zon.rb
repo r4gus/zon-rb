@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative "zigzon/version"
-require_relative "zigzon/lexer"
-require_relative "zigzon/parser"
+require_relative "zon/version"
+require_relative "zon/lexer"
+require_relative "zon/parser"
 
 module Zon
   class Error < StandardError; end
