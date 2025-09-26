@@ -27,10 +27,29 @@ module Zon
 
     def self.read(input)
       curr = ""
+      in_comment = false
+      in_string = false
 
       Enumerator.new do |y|
         input.each_char.with_index do |char, idx|
-          if char.match?(/\s/) # is whitespace
+          # Handle comments
+          if not in_string and not in_comment and char == "/" and input[idx + 1] == "/"
+            if curr.length > 0
+              y << curr
+              curr = ""
+            end 
+            in_comment = true
+            next
+          elsif in_comment and char.match?(/(\r\n|\n|\r)/)
+            # there are only line comments, i.e. every
+            # line needs to be commented separately.
+            in_comment = false
+            next
+          elsif in_comment
+            next
+          end
+          
+          if not in_string and char.match?(/\s/) # is whitespace
             if curr.length > 0
               y << curr
               curr = ""
@@ -38,18 +57,19 @@ module Zon
             next
           end
 
-          if char == "{"
+          if not in_string and char == "{"
             if curr[-1] == "."
               y << ".{"
               curr = ""
             else
               raise "Invalid character #{curr[-1]} preceding '{' at index #{idx}" 
             end
-          elsif ["}", "=", ","].include?(char)
+          elsif not in_string and ["}", "=", ","].include?(char)
             y << curr if curr.length > 0
             y << char
             curr = ""
           else
+            in_string = not in_string if char == "\""
             curr += char
           end
         end
