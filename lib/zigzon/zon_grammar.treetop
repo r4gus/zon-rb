@@ -1,0 +1,48 @@
+grammar ZonGrammar
+    rule zon
+        struct / array
+    end
+
+    rule array
+        '.{' space a_value? (space ',' space a_value)* space '}'
+    end
+
+    rule struct
+        '.{' space pair? (space ',' space pair)* space '}' 
+    end 
+
+    rule a_value
+        struct / array / string / number / literal / true / false / null
+    end
+
+    rule space
+        [\s\n\t\r]*
+    end
+       
+    rule pair
+        literal space '=' space value
+        {
+            def value(parent)
+                parent[elements[0].value.to_sym] = elements[4].value
+            end
+        }
+    end
+
+    rule literal
+        '.' [a-zA-Z_]+
+        {
+          def value
+            elements[1].text_value
+          end
+        }
+    end
+
+    rule string
+        '"' ([^"\\] / "\\" . )* '"'
+        {
+          def value(_env=nil)
+            elements[1].text_value
+          end
+        }
+    end
+end
