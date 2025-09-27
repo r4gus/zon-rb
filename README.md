@@ -1,6 +1,6 @@
 # Zig Object Notation (ZON) for Ruby
 
-The [Zig](https://ziglang.org/) Object Notation (ZON) is a file format primarily used within the Zig ecosystem. For example, ZON is used for the Zig package [manifest](https://github.com/ziglang/zig/blob/b7ab62540963d80f68d0e9ee7ce18520fb173487/doc/build.zig.zon.md) files.
+The [Zig](https://ziglang.org/) Object Notation (ZON) is a file format primarily used within the Zig ecosystem. For example, ZON is used for the Zig package [manifest](https://github.com/ziglang/zig/blob/b7ab62540963d80f68d0e9ee7ce18520fb173487/doc/build.zig.zon.md).
 
 ## Installation
 
@@ -40,6 +40,31 @@ irb(main):002> Zon.parse(File.open("../PassKeeZ/build.zig.zon"))
      hash: "uuid-0.4.0-oOieIR2AAAChAUVBY4ABjYI1XN0EbVALmiN0JIlggC3i"},
    kdbx: {path: "../kdbx"}},
  paths: ["build.zig", "build.zig.zon", "linux", "README.md", "script", "src", "static"]}
+```
+
+To serialize a Ruby object into ZON, use the `Zon::serialize` method. 
+
+```irb
+irb(main):002> o
+=>
+{name: :passkeez,
+ version: "0.5.3",
+ minimum_zig_version: "0.15.1",
+ fingerprint: 15931082159778014966,
+ dependencies:
+  {keylib: {url: "https://github.com/Zig-Sec/keylib/archive/refs/tags/0.7.0.tar.gz", hash: "keylib-0.7.0-mbYjk6qaCQACutrMpyhgstSmYxSKmcuRmLI-CJSumBeA"},
+   uuid: {url: "https://github.com/r4gus/uuid-zig/archive/refs/tags/0.4.0.tar.gz", hash: "uuid-0.4.0-oOieIR2AAAChAUVBY4ABjYI1XN0EbVALmiN0JIlggC3i"},
+   kdbx: {path: "../kdbx"}},
+ paths: ["build.zig", "build.zig.zon", "linux", "README.md", "script", "src", "static"]}
+irb(main):004> Zon::serialize(o, {:indent_level => 4})
+=> ".{\n    .name = .passkeez,\n    .version = \"0.5.3\",\n    .minimum_zig_version = \"0.15.1\",\n    .fingerprint = 0xdd1692d15d21a6f6,\n    .dependencies = .{\n        .keylib = .{\n            .url = \"https://github.com/Zig-Sec/keylib/archive/refs/tags/0.7.0.tar.gz\",\n            .hash = \"keylib-0.7.0-mbYjk6qaCQACutrMpyhgstSmYxSKmcuRmLI-CJSumBeA\",\n        },\n        .uuid = .{\n            .url = \"https://github.com/r4gus/uuid-zig/archive/refs/tags/0.4.0.tar.gz\",\n            .hash = \"uuid-0.4.0-oOieIR2AAAChAUVBY4ABjYI1XN0EbVALmiN0JIlggC3i\",\n        },\n        .kdbx = .{\n            .path = \"../kdbx\",\n        },\n    },\n    .paths = .{\n        \"build.zig\",\n        \"build.zig.zon\",\n        \"linux\",\n        \"README.md\",\n        \"script\",\n        \"src\",\n        \"static\",\n    },\n}"
+```
+
+To customize the generated ZON data one can use the `:indent_level` and `:ibase` options. The `:indent_level` specifies how much each block is indented. The `:ibase` option can be used to define in which format (hex: 16, octal: 8, binary: 2, decimal: 10) an `Integer` should be serialized. The default for `:ibase` is `16` (hexadecimal).
+
+```irb
+irb(main):010> Zon::serialize(255, {:ibase => 2})
+=> "0b11111111"
 ```
 
 ## Development
