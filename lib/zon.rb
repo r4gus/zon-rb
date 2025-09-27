@@ -3,6 +3,7 @@
 require_relative "zon/version"
 require_relative "zon/lexer"
 require_relative "zon/parser"
+require_relative "zon/serializer"
 
 module Zon
   class Error < StandardError; end
@@ -20,7 +21,11 @@ module Zon
 
     tokens = Zon::Lexer.parse data
     parser = Zon::Parser.new tokens
-    return parser.parse
+    parser.parse
+  end
+
+  def self.serialize(obj, options = {})
+    Zon::Serializer::serialize_object(obj, options)
   end
 end
 
