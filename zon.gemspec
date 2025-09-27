@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email = ["david@thesugar.de"]
 
   spec.summary = "Zig Object Notation (ZON) support for Ruby"
-  spec.description = "This gem allows you to translate ZON data into Ruby objects and vice versa."
+  spec.description = "This gem allows you to translate Zig Object Notation (ZON) data into Ruby objects and vice versa."
   spec.homepage = "https://github.com/r4gus/zon-rb"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.1.0"
