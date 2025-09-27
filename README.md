@@ -1,8 +1,6 @@
 # Zig Object Notation (ZON) for Ruby
 
-TODO: Delete this and the text below, and describe your gem
-
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/zigzon`. To experiment with that code, run `bin/console` for an interactive prompt.
+The [Zig](https://ziglang.org/) Object Notation (ZON) is a file format primarily used within the Zig ecosystem. For example, ZON is used for the Zig package [manifest](https://github.com/ziglang/zig/blob/b7ab62540963d80f68d0e9ee7ce18520fb173487/doc/build.zig.zon.md) files.
 
 ## Installation
 
@@ -22,7 +20,27 @@ gem install UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
 
 ## Usage
 
-TODO: Write usage instructions here
+To parse ZON data into a Ruby object, one can use the `Zon::parse` method. The method expects either a `String` or `IO` (`File`) object as its argument.
+
+```irb
+irb(main):001> Zon::parse(".{ \"foo\", \"bar\"}")
+=> ["foo", "bar"]
+irb(main):002> Zon.parse(File.open("../PassKeeZ/build.zig.zon"))
+=>
+{name: :passkeez,
+ version: "0.5.3",
+ minimum_zig_version: "0.15.1",
+ fingerprint: 15931082159778014966,
+ dependencies:
+  {keylib:
+    {url: "https://github.com/Zig-Sec/keylib/archive/refs/tags/0.7.0.tar.gz",
+     hash: "keylib-0.7.0-mbYjk6qaCQACutrMpyhgstSmYxSKmcuRmLI-CJSumBeA"},
+   uuid:
+    {url: "https://github.com/r4gus/uuid-zig/archive/refs/tags/0.4.0.tar.gz",
+     hash: "uuid-0.4.0-oOieIR2AAAChAUVBY4ABjYI1XN0EbVALmiN0JIlggC3i"},
+   kdbx: {path: "../kdbx"}},
+ paths: ["build.zig", "build.zig.zon", "linux", "README.md", "script", "src", "static"]}
+```
 
 ## Development
 
@@ -32,7 +50,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/zigzon.
+Bug reports and pull requests are welcome on GitHub at https://github.com/r4gus/zon-rb.
 
 ## License
 
