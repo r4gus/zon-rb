@@ -1,5 +1,7 @@
 # Zig Object Notation (ZON) for Ruby
 
+[![Gem Version](https://badge.fury.io/rb/zon-rb.svg?icon=si%3Arubygems)](https://badge.fury.io/rb/zon-rb)
+
 The [Zig](https://ziglang.org/) Object Notation (ZON) is a file format primarily used within the Zig ecosystem. For example, ZON is used for the Zig package [manifest](https://github.com/ziglang/zig/blob/b7ab62540963d80f68d0e9ee7ce18520fb173487/doc/build.zig.zon.md).
 
 ## Installation
