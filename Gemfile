@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-# Specify your gem's dependencies in zigzon.gemspec
+# Specify your gem's dependencies in zon.gemspec
 gemspec
 
 gem "rake", "~> 13.0"
