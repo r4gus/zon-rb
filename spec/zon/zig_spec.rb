@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
-module Zon
-  VERSION = "0.2.0"
+RSpec.describe Zon do
+
 end

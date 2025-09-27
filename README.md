@@ -100,6 +100,20 @@ irb(main):010> Zon::serialize(255, {:ibase => 2})
 => "0b11111111"
 ```
 
+### Zig Manifest
+
+`Zon::Zig::Manifest` provides you with an abstraction for your `build.zig.zon`. It will also validate your Zig package [manifest](https://github.com/ziglang/zig/blob/b7ab62540963d80f68d0e9ee7ce18520fb173487/doc/build.zig.zon.md) and raise an exception if one of the required fields is missing.
+
+```ruby
+o = Zon::parse(File.open("../PassKeeZ/build.zig.zon"))
+manifest = Zon::Zig::Manifest.new o
+
+# Use:
+# manifest.name
+# manifest.version
+# ...
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
