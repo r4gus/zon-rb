@@ -69,7 +69,7 @@ module Zon
             y << char
             curr = ""
           else
-            in_string = not in_string if char == "\""
+            in_string = not in_string if char == "\"" and curr[-1] != "\\"
             curr += char
           end
         end

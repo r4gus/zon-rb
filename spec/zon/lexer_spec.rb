@@ -188,4 +188,23 @@ RSpec.describe Zon::Lexer do
         expect(tokens.next).to eq(Lexer::Token.new(Lexer::TokenType::RBRACE, "}"))
       end
     end
+
+    context "edge cases" do 
+
+      it "handles strings with special characters correctly" do
+        v = File.read(File.join(__dir__, "fixtures", "special_chars.zon"))
+
+        tokens = Lexer.parse v
+        
+        expect(tokens.next).to eq(Lexer::Token.new(Lexer::TokenType::LBRACE, ".{"))
+        expect(tokens.next).to eq(Lexer::Token.new(Lexer::TokenType::STRING, "\"hello world\""))
+        expect(tokens.next).to eq(Lexer::Token.new(Lexer::TokenType::COMMA, ","))
+        expect(tokens.next).to eq(Lexer::Token.new(Lexer::TokenType::STRING, "\"string with \\\" apostrophe\""))
+        expect(tokens.next).to eq(Lexer::Token.new(Lexer::TokenType::COMMA, ","))
+        expect(tokens.next).to eq(Lexer::Token.new(Lexer::TokenType::STRING, "\".{} =// \""))
+        expect(tokens.next).to eq(Lexer::Token.new(Lexer::TokenType::COMMA, ","))
+        expect(tokens.next).to eq(Lexer::Token.new(Lexer::TokenType::RBRACE, "}"))
+      end
+
+    end
 end
