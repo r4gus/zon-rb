@@ -5,6 +5,7 @@ require_relative "zon/lexer"
 require_relative "zon/parser"
 require_relative "zon/serializer"
 require_relative "zon/zig"
+require_relative "zon/hasher"
 
 ##
 # Zig Object Notation (ZON) de-/serializer.

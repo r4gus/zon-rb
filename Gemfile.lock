@@ -1,18 +1,21 @@
 PATH
   remote: .
   specs:
-    zon-rb (0.1.0)
+    zon-rb (0.2.0)
 
 GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.3)
+    base64 (0.3.0)
     date (3.4.1)
     diff-lcs (1.6.2)
     erb (5.0.2)
+    find (0.2.0)
     json (2.15.0)
     language_server-protocol (3.17.0.5)
     lint_roller (1.1.0)
+    minitar (1.1.0)
     parallel (1.27.0)
     parser (3.3.9.0)
       ast (~> 2.4.1)
@@ -60,16 +63,21 @@ GEM
     unicode-display_width (3.2.0)
       unicode-emoji (~> 4.1)
     unicode-emoji (4.1.0)
+    zlib (3.2.1)
 
 PLATFORMS
   ruby
   x86_64-linux
 
 DEPENDENCIES
+  base64 (~> 0.3.0)
+  find (~> 0.2.0)
+  minitar (~> 1.1)
   rake (~> 13.0)
   rdoc (~> 6.14, >= 6.14.2)
   rspec (~> 3.0)
   rubocop (~> 1.21)
+  zlib (~> 3.2, >= 3.2.1)
   zon-rb!
 
 BUNDLED WITH
