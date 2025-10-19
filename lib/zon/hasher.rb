@@ -44,6 +44,9 @@ module Zon
 
       @manifest = Zon.parse(File.open(manifest_path))
       raise ArgumentError, "no 'paths' field in ZON manifest '#{manifest_path}'" if not @manifest.key? :paths
+      raise ArgumentError, "no 'name' field in ZON manifest '#{manifest_path}'" if not @manifest.key? :name
+      raise ArgumentError, "no 'version' field in ZON manifest '#{manifest_path}'" if not @manifest.key? :version
+      raise ArgumentError, "no 'fingerprint' field in ZON manifest '#{manifest_path}'" if not @manifest.key? :fingerprint
       
       @paths = []
       @results = {}

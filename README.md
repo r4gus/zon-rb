@@ -114,6 +114,18 @@ manifest = Zon::Zig::Manifest.new o
 # ...
 ```
 
+### Zig Package Hash
+
+Given a path `pdir` that points to the root of a Zig package, one can calculate the packages hash using the `Zon::Hasher`:
+
+```ruby
+hasher = Zon::Hasher.new pdir
+hasher.hash
+# Hash with the format nnnn-vvvv-XXXX..XXXX
+# e.g.: uuid-0.4.0-oOieIR2AAAChAUVBY4ABjYI1XN0EbVALmiN0JIlggC3i
+result = hasher.result
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.

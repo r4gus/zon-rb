@@ -16,6 +16,7 @@ module Zon
         raise "Missing '.name'" if not zon[:name]
         raise "Missing '.version'" if not zon[:version]
         raise "Missing '.fingerprint'" if not zon[:fingerprint]
+        raise "Missing '.paths'" if not zon[:paths]
 
         if zon[:dependencies]
           zon[:dependencies].each do |key, value|
