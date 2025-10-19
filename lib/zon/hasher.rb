@@ -3,6 +3,32 @@ require "find"
 require "base64"
 
 module Zon
+  ##
+  # Produces a package hash of the format: $name-$semver-$hashplus
+  #
+  # Along with 200 bits of a SHA-256, a package hash includes:
+  # - package name
+  # - package version
+  # - id component of the package fingerprint
+  # - total unpacked size on disk
+  #
+  # The following steps are taken to calculate the hash:
+  # 1. Read the list of included paths from the manifest, i.e. files that are part of the package.
+  # 2. Resolve the paths:
+  #     - for directories: include all files that are within the directory or a child dir.
+  #     - for files: include the file
+  #     - for symlinks: TODO
+  # 3. Sort the paths by:
+  #     1. Lexographical order
+  #     2. by length
+  # 4. For every included file:
+  #     - Calculate a SHA-256 over: RELATIVE_PATH_FROM_PKG_ROOT || 0x0000 || DATA
+  #     - Record the file size in bytes
+  #     - TODO: the 0x0000 will probably change in the future
+  # 5. Calculate a SHA-256 sum over all calculated file hashes
+  #     - respecting the previously mentioned sorting rules.
+  # 6. Sum up the sizes of all files into a u32 (sizes that don't fit into a 32-bit unsingned integer will be saturated with the value 2**32 - 1)
+  # 7. Produce the package hash
   class Hasher
     attr_reader :paths, :total_size, :digest
 
@@ -35,11 +61,9 @@ module Zon
             pstr = p.delete_prefix(@package_path)[1..]
             @paths.append(pstr) if not @paths.include? pstr
           end
-        elsif File.file? full_path
+        elsif File.file? full_path or File.symlink? full_path
           pstr = full_path.delete_prefix(@package_path)[1..]
           @paths.append(pstr) if not @paths.include? pstr
-        elsif File.symlink? full_path
-
         end
       end
 
@@ -122,13 +146,19 @@ module Zon
       sha2.update path
 
       full_path = File.join(package_path, path)
-      f = File.open full_path
-      data = f.read
-      file_size = data.bytesize
-      
-      # Hard-coded false executable bit: https://github.com/ziglang/zig/issues/17463
-      sha2.update "\x00\x00"
-      sha2.update data
+
+      if File.file? full_path
+        f = File.open full_path
+        data = f.read
+        file_size = data.bytesize
+        
+        # Hard-coded false executable bit: https://github.com/ziglang/zig/issues/17463
+        sha2.update "\x00\x00"
+        sha2.update data
+      elsif File.symlink? full_path
+        link_name = File.readlink full_path
+        sha2.update link_name
+      end
 
       # TODO: symlink
 
