@@ -119,7 +119,7 @@ manifest = Zon::Zig::Manifest.new o
 Given a path `pdir` that points to the root of a Zig package, one can calculate the packages hash using the `Zon::Hasher`:
 
 ```ruby
-hasher = Zon::Hasher.new pdir
+hasher = Zon::Zig::Hasher.new pdir
 hasher.hash
 # Hash with the format nnnn-vvvv-XXXX..XXXX
 # e.g.: uuid-0.4.0-oOieIR2AAAChAUVBY4ABjYI1XN0EbVALmiN0JIlggC3i
