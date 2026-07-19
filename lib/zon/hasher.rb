@@ -33,8 +33,6 @@ module Zon
     class Hasher
       attr_reader :paths, :total_size, :digest
 
-      SUPPORTED_ZIG_VERSIONS = ["0.14.0", "0.14.1", "0.15.1", "0.15.2"]
-
       def initialize(package_path, manifest_name: "build.zig.zon")
         # Make sure we have a valid path to work with
         @package_path = package_path
