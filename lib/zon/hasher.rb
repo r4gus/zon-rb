@@ -33,7 +33,7 @@ module Zon
     class Hasher
       attr_reader :paths, :total_size, :digest
 
-      def initialize(package_path, manifest_name: "build.zig.zon")
+      def initialize(package_path, manifest_name: "build.zig.zon", debug: false)
         # Make sure we have a valid path to work with
         @package_path = package_path
         raise ArgumentError, "not a directory '#{@package_path}'" if not Dir.exist? @package_path
@@ -47,6 +47,7 @@ module Zon
         raise ArgumentError, "no 'version' field in ZON manifest '#{manifest_path}'" if not @manifest.key? :version
         raise ArgumentError, "no 'fingerprint' field in ZON manifest '#{manifest_path}'" if not @manifest.key? :fingerprint
         
+        @debug = debug
         @paths = []
         @results = {}
         @total_size = 0
@@ -58,7 +59,11 @@ module Zon
           if File.directory? full_path
             f = Find.find(full_path)
             f.each do |p|
-              next if File.directory? p
+              # TODO: it seems like when "" is used as path, hidden folders
+              # like .git are not considered but hidden files like .gitignore
+              # are. Make this more robust by removing all hidden folders that
+              # are not explicitely listed in the manifest.
+              next if File.directory? p or p.include? ".git/"
               
               pstr = p.delete_prefix(@package_path)[1..]
               @paths.append(pstr) if not @paths.include? pstr
@@ -87,6 +92,8 @@ module Zon
         # Hash all files individually  
         @paths.each do |str|
           @results[str] = Zon::Zig::Hasher::hash_file(@package_path, str)
+
+          puts "file: #{@results[str][:digest]}: #{str}" if @debug
         end 
 
         sha2 = Digest::SHA2.new

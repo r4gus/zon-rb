@@ -1,3 +1,7 @@
+## [0.3.2] - 2026-08-01
+
+- Temporary fix for calculating package hashes where "" is used as path.
+
 ## [0.2.0] - 2025-09-27
 
 - Added basic Zig package manifest support.
