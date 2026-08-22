@@ -115,6 +115,61 @@ RSpec.describe Zon::Parser do
 
     end
 
+    context "valid build.zig.zon for nightwatch with @-literals" do
+      before do
+        @dict = <<~ZON
+        .{
+            .name = .nightwatch,
+            .version = "1.0.0",
+            .fingerprint = 0xb88932861fde7cb9,
+            .minimum_zig_version = "0.16.0",
+            .dependencies = .{
+                .@"xcode-frameworks" = .{
+                    .url = "git+https://code.hexops.org/hexops/xcode-frameworks?ref=main#8a1cfb373587ea4c9bb1468b7c986462d8d4e10e",
+                    .hash = "N-V-__8AALShqgXkvqYU6f__FrA22SMWmi2TXCJjNTO1m8XJ",
+                    .lazy = true,
+                },
+            },
+            .paths = .{
+                "build.zig",
+                "build.zig.zon",
+                "src",
+                "README.md",
+            },
+        }
+        ZON
+      end
+
+      it "parses a ZON string into a Ruby object" do
+        expected = {
+          :name => :nightwatch, 
+          :version => "1.0.0", 
+          :fingerprint => 0xb88932861fde7cb9,
+          :minimum_zig_version => "0.16.0",
+          :dependencies => {
+            "xcode-frameworks" => {
+              :url => "git+https://code.hexops.org/hexops/xcode-frameworks?ref=main#8a1cfb373587ea4c9bb1468b7c986462d8d4e10e",
+              :hash => "N-V-__8AALShqgXkvqYU6f__FrA22SMWmi2TXCJjNTO1m8XJ",
+              :lazy => true,
+            },
+          },
+          :paths => [
+            "build.zig",
+            "build.zig.zon",
+            "src",
+            "README.md",
+          ],
+        }
+
+        tokens = Lexer.parse @dict
+        parser = Parser.new tokens
+
+        obj = parser.parse
+
+        expect(obj).to eq(expected)
+      end
+    end
+
     context "valid build.zig.zon for packages supporting Zig 0.15.1 with comments" do
       before do
         @dict = <<~ZON

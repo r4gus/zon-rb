@@ -9,6 +9,7 @@ module Zon
       RBRACE = 5
       EQUALS = 6
       COMMA = 7
+      LITERAL2 = 8
     end
 
     class Token
@@ -98,6 +99,8 @@ module Zon
             y << Token.new(TokenType::NUMBER, token_str)
           elsif self.is_literal? token_str
             y << Token.new(TokenType::LITERAL, token_str)
+          elsif self.is_at_literal? token_str
+            y << Token.new(TokenType::LITERAL2, token_str)
           else
             raise "Unknown token '#{token_str}' at index #{idx}"
           end
@@ -107,6 +110,11 @@ module Zon
 
     def self.is_literal?(token_str)
       literal_regex = /\.[a-zA-Z][a-zA-Z_]*/
+      !!(token_str =~ literal_regex)
+    end
+
+    def self.is_at_literal?(token_str)
+      literal_regex = /\.@\"[^"]+\"/
       !!(token_str =~ literal_regex)
     end
 

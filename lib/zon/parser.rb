@@ -32,7 +32,7 @@ module Zon
 
         v = self.parse
 
-        if v.is_a? Symbol and self.next_token? Lexer::TokenType::EQUALS
+        if (v.is_a? Symbol or v.is_a? String) and self.next_token? Lexer::TokenType::EQUALS
           # This is a Zon struct, i.e. translate it to a Ruby hash
           k = v
           self.next_equals # skip equals
@@ -93,7 +93,9 @@ module Zon
 
       if @curr and @curr.type == Lexer::TokenType::LITERAL
         @curr.value[1..].to_sym # create sym from string without the '.'
-      elsif
+      elsif @curr and @curr.type == Lexer::TokenType::LITERAL2
+        @curr.value[3..-2]
+      else
         raise "Expected literal token but got '#{@curr.value}'"
       end
     end
@@ -107,6 +109,8 @@ module Zon
 
       if @curr.type == Lexer::TokenType::LITERAL
         value = @curr.value[1..].to_sym
+      elsif @curr.type == Lexer::TokenType::LITERAL2
+        value = @curr.value[3..-2]
       elsif @curr.type == Lexer::TokenType::STRING
         value = @curr.value[1..-2]
       elsif @curr.type == Lexer::TokenType::NUMBER
